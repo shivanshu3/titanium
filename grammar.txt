@@ -20,11 +20,19 @@ start
 
 expression
     = terms:( _ term _ )+ {
-        return {match:terms};
+        var result = terms.map(x => {
+            return x[1];
+        });
+        return {terms:result};
     }
 
 procedure
-    = '(' expr:expression ')' { return expr; }
+    = '(' expr:expression ')' {
+        return {
+            type: 'procedure',
+            expression: expr
+        }
+    }
 
 term
     = literal
