@@ -1,16 +1,18 @@
 {
     function makeSymbolOperator(text) {
         return {
-            type: 'symbolOperator',
+            type: 'operator',
+            opType: 'symbolOperator',
             name: text
         };
     }
 
     function makeVariableOperator(opType, text){
         return {
-            type: 'variableOperator',
-            opType: opType,
-            name: text
+            type: 'operator',
+            opType: 'variableOperator',
+            variableOpType: opType,
+            variableName: text
         };
     }
 }
@@ -47,7 +49,8 @@ operator
 wordOperator
     = name:identifier {
         return {
-            type: 'wordOperator',
+            type: 'operator',
+            opType: 'wordOperator',
             name: name
         };
     }
