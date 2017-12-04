@@ -59,21 +59,38 @@ literal
     / string
 
 number
-    = digits:[0-9]+ { return parseInt(digits.join(''), 10); }
-
-boolean
-    = 'true'
-    / 'false'
-    {
-        if (text() == 'true') {
-            return true;
-        } else {
-            return false;
+    = digits:[0-9]+ {
+        return {
+            type: 'literal',
+            literalType: 'number',
+            value: parseInt(digits.join(''), 10)
         }
     }
 
+boolean
+    = 'true' {
+        return {
+            type: 'literal',
+            literalType: 'bool',
+            value: true
+        };
+    }
+    / 'false' {
+        return {
+            type: 'literal',
+            literalType: 'bool',
+            value: false
+        };
+    }
+
 string
-    = quotation_mark chars:char* quotation_mark { return chars.join(""); }
+    = quotation_mark chars:char* quotation_mark {
+        return {
+            type: 'literal',
+            literalType: 'string',
+            value: chars.join("")
+        };
+    }
 
 char
     = unescaped
