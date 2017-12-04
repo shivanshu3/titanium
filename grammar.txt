@@ -1,5 +1,23 @@
 start
-    = literal
+    = expression
+
+expression
+    = lits : ( _ (literal / wordOperator) _ ) + { return {match:lits}; }
+
+procedure
+    = '(' _ expr:expression _ ')' { return expr; }
+
+wordOperator
+    = name:identifier {
+        return {
+            name: name,
+            type: 'wordOperator'
+        };
+    }
+
+identifier
+    = head:[a-zA-Z_] tail:[a-zA-Z_0-9]*
+    { return head + tail.join(''); }
 
 literal
     = number
@@ -54,3 +72,6 @@ unescaped
 // See RFC 4234, Appendix B (http://tools.ietf.org/html/rfc4234).
 DIGIT  = [0-9]
 HEXDIG = [0-9a-f]i
+
+_ "whitespace"
+    = [ \t\n\r]* { return null; }
