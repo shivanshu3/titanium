@@ -1,1 +1,3 @@
- 4 5 + print (4 5) =foo /foo(\d+)/i
+`-` readLines /foo/ grep 100 =id ( /foo(\d+)/ ^id searchReplace ^id ++ =id ) map ^p map
+
+( dup length =len 0 =i 0 =sum ( ^i ^len < ) ( dup ^i [] ^sum + =sum ) while ^len / ) =avg

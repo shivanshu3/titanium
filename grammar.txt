@@ -20,7 +20,7 @@
 start
     = expression
 
-expression
+expression "expression"
     = terms:( _ term _ )+ {
         var result = terms.map(x => {
             return x[1];
@@ -28,7 +28,7 @@ expression
         return {terms:result};
     }
 
-procedure
+procedure "procedure"
     = '(' expr:expression ')' {
         return {
             type: 'procedure',
@@ -36,17 +36,17 @@ procedure
         }
     }
 
-term
+term "term"
     = literal
     / operator
     / procedure
 
-operator
+operator "operator"
     = wordOperator
     / variableOperator
     / symbolOperator
 
-wordOperator
+wordOperator "wordOperator"
     = name:identifier {
         return {
             type: 'operator',
@@ -55,29 +55,35 @@ wordOperator
         };
     }
 
-symbolOperator
+symbolOperator "symbolOperator"
     = '++' { return makeSymbolOperator(text()); }
     / '--' { return makeSymbolOperator(text()); }
+    / '[]' { return makeSymbolOperator(text()); }
+    / '<=' { return makeSymbolOperator(text()); }
+    / '>=' { return makeSymbolOperator(text()); }
+    / '==' { return makeSymbolOperator(text()); }
     / '+' { return makeSymbolOperator(text()); }
     / '-' { return makeSymbolOperator(text()); }
     / '*' { return makeSymbolOperator(text()); }
     / '/' { return makeSymbolOperator(text()); }
+    / '<' { return makeSymbolOperator(text()); }
+    / '>' { return makeSymbolOperator(text()); }
 
-variableOperator
+variableOperator "variableOperator"
     = '=' name:identifier { return makeVariableOperator('=', name); }
     / '^' name:identifier { return makeVariableOperator('^', name); }
 
-identifier
+identifier "identifier"
     = head:[a-zA-Z_] tail:[a-zA-Z_0-9]*
     { return head + tail.join(''); }
 
-literal
+literal "literal"
     = number
     / boolean
     / string
     / regex
 
-number
+number "number"
     = digits:[0-9]+ {
         return {
             type: 'literal',
@@ -86,7 +92,7 @@ number
         }
     }
 
-boolean
+boolean "boolean"
     = 'true' {
         return {
             type: 'literal',
@@ -102,7 +108,7 @@ boolean
         };
     }
 
-regex
+regex "regular expression"
     = '/' body:regex_char* '/' flags:[a-zA-Z]* {
         return {
             type: 'literal',
@@ -114,11 +120,11 @@ regex
         };
     }
 
-regex_char
+regex_char "regular expression character"
     = [^\0-\x1F\x2F]
 
-string
-    = quotation_mark chars:char* quotation_mark {
+string "string"
+    = '`' chars:char* '`' {
         return {
             type: 'literal',
             literalType: 'string',
@@ -126,7 +132,7 @@ string
         };
     }
 
-char
+char "character"
     = unescaped
     / escape
     sequence:(
@@ -144,13 +150,10 @@ char
     )
     { return sequence; }
 
-escape
+escape "backslash"
     = '\\'
 
-quotation_mark
-    = '`'
-
-unescaped
+unescaped "unescaped character"
     = [^\0-\x1F\x60\x5C]
 
 // ----- Core ABNF Rules -----
