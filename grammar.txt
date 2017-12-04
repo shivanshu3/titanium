@@ -1,19 +1,40 @@
+{
+    function makeSymbolOperator(text) {
+        return {
+            type: 'symbolOperator',
+            name: text
+        };
+    }
+}
+
 start
     = expression
 
 expression
-    = lits : ( _ (literal / wordOperator) _ ) + { return {match:lits}; }
+    = lits : ( _ (literal / operator) _ ) + { return {match:lits}; }
 
 procedure
     = '(' _ expr:expression _ ')' { return expr; }
 
+operator
+    = wordOperator
+    / symbolOperator
+
 wordOperator
     = name:identifier {
         return {
-            name: name,
-            type: 'wordOperator'
+            type: 'wordOperator',
+            name: name
         };
     }
+
+symbolOperator
+    = '++' { return makeSymbolOperator(text()); }
+    / '--' { return makeSymbolOperator(text()); }
+    / '+' { return makeSymbolOperator(text()); }
+    / '-' { return makeSymbolOperator(text()); }
+    / '*' { return makeSymbolOperator(text()); }
+    / '/' { return makeSymbolOperator(text()); }
 
 identifier
     = head:[a-zA-Z_] tail:[a-zA-Z_0-9]*
