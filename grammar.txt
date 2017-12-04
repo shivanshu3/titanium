@@ -75,6 +75,7 @@ literal
     = number
     / boolean
     / string
+    / regex
 
 number
     = digits:[0-9]+ {
@@ -100,6 +101,21 @@ boolean
             value: false
         };
     }
+
+regex
+    = '/' body:regex_char* '/' flags:[a-zA-Z]* {
+        return {
+            type: 'literal',
+            literalType: 'regex',
+            value: {
+                body: body.join(''),
+                flags: flags.join('')
+            }
+        };
+    }
+
+regex_char
+    = [^\0-\x1F\x2F]
 
 string
     = quotation_mark chars:char* quotation_mark {

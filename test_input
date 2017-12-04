@@ -1,1 +1,1 @@
- 4 5 + print (4 5) =foo 
+ 4 5 + print (4 5) =foo /foo(\d+)/i
