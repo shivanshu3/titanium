@@ -43,7 +43,7 @@ p <=> print
 
 ---------
 
-`-` readLines /foo/ grep 100 =id :( /foo(\d+)/ ^id searchReplace ^id ++ =id ) map ^p map
+`-` readLines /foo/ grep 100 =id ( /foo(\d+)/ ^id searchReplace ^id ++ =id ) map ^p map
 
 This is how an end user could use this language:
 dir | j /modules=C:\j\modules /debug=true `-` rl /error\\.txt/i g p

@@ -19,10 +19,17 @@ start
     = expression
 
 expression
-    = lits : ( _ (literal / operator) _ ) + { return {match:lits}; }
+    = terms:( _ term _ )+ {
+        return {match:terms};
+    }
 
 procedure
-    = '(' _ expr:expression _ ')' { return expr; }
+    = '(' expr:expression ')' { return expr; }
+
+term
+    = literal
+    / operator
+    / procedure
 
 operator
     = wordOperator
