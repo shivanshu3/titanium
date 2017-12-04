@@ -5,6 +5,14 @@
             name: text
         };
     }
+
+    function makeVariableOperator(opType, text){
+        return {
+            type: 'variableOperator',
+            opType: opType,
+            name: text
+        };
+    }
 }
 
 start
@@ -18,6 +26,7 @@ procedure
 
 operator
     = wordOperator
+    / variableOperator
     / symbolOperator
 
 wordOperator
@@ -35,6 +44,10 @@ symbolOperator
     / '-' { return makeSymbolOperator(text()); }
     / '*' { return makeSymbolOperator(text()); }
     / '/' { return makeSymbolOperator(text()); }
+
+variableOperator
+    = '=' name:identifier { return makeVariableOperator('=', name); }
+    / '^' name:identifier { return makeVariableOperator('^', name); }
 
 identifier
     = head:[a-zA-Z_] tail:[a-zA-Z_0-9]*
