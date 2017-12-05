@@ -91,6 +91,27 @@ exports.specialOperators = {
 		var a = stack.pop();
 		stack.push(a);
 		stack.push(a);
+	},
+	'if' : function(stack) {
+		var mainBody = stack.pop().expression;
+		var ifExpression = stack.pop().expression;
+		processExpression(ifExpression, stack);
+		var resultIfExpression = stack.pop();
+		if (resultIfExpression) {
+			processExpression(mainBody, stack);
+		}
+	},
+	'ifelse' : function(stack) {
+		var falseBody = stack.pop().expression;
+		var trueBody = stack.pop().expression;
+		var ifExpression = stack.pop().expression;
+		processExpression(ifExpression, stack);
+		var resultIfExpression = stack.pop();
+		if (resultIfExpression) {
+			processExpression(trueBody, stack);
+		} else {
+			processExpression(falseBody, stack);
+		}
 	}
 };
 
