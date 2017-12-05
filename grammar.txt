@@ -110,13 +110,18 @@ boolean "boolean"
 
 regex "regular expression"
     = '/' body:regex_char* '/' flags:[a-zA-Z]* {
+        var regexBody = body.join('');
+        var regexFlags = flags.join('');
+        var regex;
+        try {
+            regex = new RegExp(regexBody, regexFlags);
+        } catch (e) {
+            error(e.message);
+        }
         return {
             type: 'literal',
             literalType: 'regex',
-            value: {
-                body: body.join(''),
-                flags: flags.join('')
-            }
+            value: regex
         };
     }
 

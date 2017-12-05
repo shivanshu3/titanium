@@ -23,5 +23,47 @@ try {
 	}
 }
 
+var mainStack = [];
+
+var compiledExpression = compileExpression(ast);
+
+for (var i = 0; i < compiledExpression.terms.length; i++) {
+	mainStack.push(compiledExpression.terms[i]);
+}
+
+function compileExpression(expr) {
+	var compiledTerms = [];
+
+	for (var i = 0; i < expr.terms.length; i++) {
+		var term = expr.terms[i];
+
+		var compiledTerm = compileTerm(term);
+		compiledTerms.push(compiledTerm);
+	}
+
+	return {
+		terms: compiledTerms
+	};
+}
+
+function compileTerm(term) {
+	if (term.type == 'literal') {
+		return compileLiteral(term);
+	} else if (term.type == 'operator') {
+		return term;
+	} else if (term.type == 'procedure') {
+		return {
+			type: term.type,
+			expression: compileExpression(term.expression)
+		};
+	} else {
+		throw 'Invalid term';
+	}
+}
+
+function compileLiteral(term) {
+	return term.value;
+}
+
 console.log(JSON.stringify(ast, null, '  '));
 debugger;
