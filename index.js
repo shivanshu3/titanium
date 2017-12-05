@@ -40,6 +40,16 @@ exports.operatorModules = {
 	}
 };
 
+// this is also a hack. should not be a part of the exports object:
+exports.specialOperators = {
+	'swap' : function(stack) {
+		var a = stack.pop();
+		var b = stack.pop();
+		stack.push(a);
+		stack.push(b);
+	}
+};
+
 var mainStack = [];
 
 var compiledExpression = compileExpression(ast);
@@ -59,17 +69,16 @@ function processExpression(expr) {
 
 function operate(stack, operatorTerm) {
 	// console.log(operatorTerm.opType + ' operating...');
-	var operatorModule = getOperatorModule(operatorTerm);
-	applyOperatorModule(stack, operatorModule);
-}
-
-function getOperatorModule(operatorTerm) {
-	if ((operatorTerm.opType == 'wordOperator') || (operatorTerm.opType == 'symbolOperator')) {
-		return exports.operatorModules[operatorTerm.name];
-	} else if (operatorTerm.opType == 'variableOperator') {
+	if (operatorTerm.opType == 'variableOperator') {
 		throw 'variableOperator is not implemented yet';
+	} else if (exports.specialOperators[operatorTerm.name] != undefined) {
+		var operatorModule = exports.specialOperators[operatorTerm.name];
+		operatorModule(stack);
+	} else if (exports.operatorModules[operatorTerm.name] != undefined) {
+		var operatorModule = exports.operatorModules[operatorTerm.name];
+		applyOperatorModule(stack, operatorModule);
 	} else {
-		throw 'illegal operator type';
+		throw 'bad operator?';
 	}
 }
 
