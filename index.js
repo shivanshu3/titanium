@@ -32,8 +32,35 @@ exports.operatorModules = {
 	'-' : function(a, b) {
 		return a - b;
 	},
+	'*' : function(a, b) {
+		return a * b;
+	},
+	'/' : function(a, b) {
+		return a / b;
+	},
+	'>' : function(a, b) {
+		return a > b;
+	},
+	'<' : function(a, b) {
+		return a < b;
+	},
+	'>=' : function(a, b) {
+		return a >= b;
+	},
+	'<=' : function(a, b) {
+		return a <= b;
+	},
+	'==' : function(a, b) {
+		return a == b;
+	},
 	'++' : function(a) {
 		return a + 1;
+	},
+	'--' : function(a) {
+		return a - 1;
+	},
+	'[]' : function(arr, index) {
+		return arr[index];
 	},
 	'print' : function(x) {
 		console.log(x);
