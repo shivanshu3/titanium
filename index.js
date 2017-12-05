@@ -72,6 +72,7 @@ exports.operatorModules = {
 	},
 	'push' : function(arr, element) {
 		arr.push(element);
+		return arr;
 	},
 	'length' : function(arr) {
 		return arr.length;
