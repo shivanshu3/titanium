@@ -37,6 +37,18 @@ exports.operatorModules = {
 	},
 	'print' : function(x) {
 		console.log(x);
+	},
+	'newarray' : function() {
+		return [];
+	},
+	'push' : function(arr, element) {
+		arr.push(element);
+	},
+	'map' : function(arr, func) {
+		return arr.map(func);
+	},
+	'length' : function(arr) {
+		return arr.length;
 	}
 };
 
@@ -47,6 +59,11 @@ exports.specialOperators = {
 		var b = stack.pop();
 		stack.push(a);
 		stack.push(b);
+	},
+	'dup' : function(stack) {
+		var a = stack.pop();
+		stack.push(a);
+		stack.push(a);
 	}
 };
 
@@ -70,7 +87,17 @@ function processExpression(expr) {
 function operate(stack, operatorTerm) {
 	// console.log(operatorTerm.opType + ' operating...');
 	if (operatorTerm.opType == 'variableOperator') {
-		throw 'variableOperator is not implemented yet';
+		if (operatorTerm.variableOpType == '^') {
+			if (exports.operatorModules[operatorTerm.variableName] != undefined) {
+				stack.push(exports.operatorModules[operatorTerm.variableName]);
+			} else {
+				throw 'Could not find ' + operatorTerm.variableName;
+			}
+		} else if (operatorTerm.variableOpType == '=') {
+			throw 'variable assignment is not implemented yet';
+		} else {
+			throw 'bad variable operator?';
+		}
 	} else if (exports.specialOperators[operatorTerm.name] != undefined) {
 		var operatorModule = exports.specialOperators[operatorTerm.name];
 		operatorModule(stack);
@@ -78,7 +105,7 @@ function operate(stack, operatorTerm) {
 		var operatorModule = exports.operatorModules[operatorTerm.name];
 		applyOperatorModule(stack, operatorModule);
 	} else {
-		throw 'bad operator?';
+		throw 'bad operator? ' + operatorTerm.name;
 	}
 }
 
