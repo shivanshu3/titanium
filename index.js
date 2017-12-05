@@ -23,6 +23,8 @@ try {
 	}
 }
 
+// this is a hack to make operatorModules a global variable.
+// it should not be tied to the exports object.
 exports.operatorModules = {
 	'+' : function(a, b) {
 		return a + b;
