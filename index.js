@@ -23,6 +23,21 @@ try {
 	}
 }
 
+exports.operatorModules = {
+	'+' : function(a, b) {
+		return a + b;
+	},
+	'-' : function(a, b) {
+		return a - b;
+	},
+	'++' : function(a) {
+		return a + 1;
+	},
+	'print' : function(x) {
+		console.log(x);
+	}
+};
+
 var mainStack = [];
 
 var compiledExpression = compileExpression(ast);
@@ -33,15 +48,39 @@ function processExpression(expr) {
 	for (var i = 0; i < expr.terms.length; i++) {
 		var term = expr.terms[i];
 		if (!termIsOperator(term)) {
-			mainStack.push(expr);
+			mainStack.push(term);
 		} else {
 			operate(mainStack, term);
 		}
 	}
 }
 
-function operate(stack, term) {
-	console.log(term.opType + ' operating...');
+function operate(stack, operatorTerm) {
+	// console.log(operatorTerm.opType + ' operating...');
+	var operatorModule = getOperatorModule(operatorTerm);
+	applyOperatorModule(stack, operatorModule);
+}
+
+function getOperatorModule(operatorTerm) {
+	if ((operatorTerm.opType == 'wordOperator') || (operatorTerm.opType == 'symbolOperator')) {
+		return exports.operatorModules[operatorTerm.name];
+	} else if (operatorTerm.opType == 'variableOperator') {
+		throw 'variableOperator is not implemented yet';
+	} else {
+		throw 'illegal operator type';
+	}
+}
+
+function applyOperatorModule(stack, operatorModule) {
+	var args = [];
+	for (var i = 0; i < operatorModule.length; i++) {
+		args.unshift(stack.pop());
+	}
+
+	var returnValue = operatorModule.apply(null, args);
+	if (returnValue != undefined) {
+		stack.push(returnValue);
+	}
 }
 
 /**
@@ -105,5 +144,5 @@ function compileLiteral(term) {
 	return term.value;
 }
 
-console.log(JSON.stringify(ast, null, '  '));
-debugger;
+// console.log(JSON.stringify(ast, null, '  '));
+// debugger;
