@@ -67,19 +67,20 @@ exports.specialOperators = {
 	}
 };
 
+// The main datastructures:
 var mainStack = [];
+var theHeap = {};
 
 var compiledExpression = compileExpression(ast);
+processExpression(compiledExpression, mainStack);
 
-processExpression(compiledExpression);
-
-function processExpression(expr) {
+function processExpression(expr, stack) {
 	for (var i = 0; i < expr.terms.length; i++) {
 		var term = expr.terms[i];
 		if (!termIsOperator(term)) {
-			mainStack.push(term);
+			stack.push(term);
 		} else {
-			operate(mainStack, term);
+			operate(stack, term);
 		}
 	}
 }
@@ -88,13 +89,15 @@ function operate(stack, operatorTerm) {
 	// console.log(operatorTerm.opType + ' operating...');
 	if (operatorTerm.opType == 'variableOperator') {
 		if (operatorTerm.variableOpType == '^') {
-			if (exports.operatorModules[operatorTerm.variableName] != undefined) {
+			if (theHeap[operatorTerm.variableName] != undefined) {
+				stack.push(theHeap[operatorTerm.variableName]);
+			} else if (exports.operatorModules[operatorTerm.variableName] != undefined) {
 				stack.push(exports.operatorModules[operatorTerm.variableName]);
 			} else {
 				throw 'Could not find ' + operatorTerm.variableName;
 			}
 		} else if (operatorTerm.variableOpType == '=') {
-			throw 'variable assignment is not implemented yet';
+			variableAssign(stack, operatorTerm.variableName);
 		} else {
 			throw 'bad variable operator?';
 		}
@@ -107,6 +110,10 @@ function operate(stack, operatorTerm) {
 	} else {
 		throw 'bad operator? ' + operatorTerm.name;
 	}
+}
+
+function variableAssign(stack, variableName) {
+	theHeap[variableName] = stack.pop();
 }
 
 function applyOperatorModule(stack, operatorModule) {
