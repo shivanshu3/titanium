@@ -1,8 +1,19 @@
+#!/usr/bin/env node
+
 var fs = require('fs');
 var process = require('process');
 var parser = require('./grammar.js');
 
-var testInput = fs.readFileSync('./test_input').toString();
+var inputProgram;
+
+if (process.argv.length == 2) {
+	inputProgram = fs.readFileSync('./test_input').toString();
+} else {
+	inputProgram = '';
+	for (var i = 2; i < process.argv.length; i++) {
+		inputProgram = inputProgram + ' ' + process.argv[i];
+	}
+}
 
 function stringifyErrorLocation(location) {
 	function singleLocation (singleLocation) {
@@ -13,7 +24,7 @@ function stringifyErrorLocation(location) {
 
 var ast;
 try {
-	ast = parser.parse(testInput);
+	ast = parser.parse(inputProgram);
 } catch (ex) {
 	if (ex.name == 'SyntaxError') {
 		console.error('SyntaxError: ' + ex.message);
