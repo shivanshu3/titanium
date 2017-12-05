@@ -1,4 +1,5 @@
 var fs = require('fs');
+var process = require('process');
 var parser = require('./grammar.js');
 
 var testInput = fs.readFileSync('./test_input').toString();
@@ -17,6 +18,7 @@ try {
 	if (ex.name == 'SyntaxError') {
 		console.error('SyntaxError: ' + ex.message);
 		console.error(stringifyErrorLocation(ex.location));
+		process.exit(1);
 	} else {
 		console.error('Unknown Error!');
 		throw ex;
@@ -76,6 +78,21 @@ exports.operatorModules = {
 	},
 	'length' : function(arr) {
 		return arr.length;
+	},
+	'del' : function(a) {
+	},
+	'concat' : function(a, b) {
+		return a.concat(b);
+	},
+	'readlines' : function(fileName) {
+		var fileContents = fs.readFileSync(fileName).toString();
+		return fileContents.split(/\r?\n/);
+	},
+	'grep' : function(arr, regex) {
+		return arr.filter(x => regex.test(x));
+	},
+	'searchreplace' : function(str, search, replace) {
+		return str.replace(search, replace);
 	}
 };
 
