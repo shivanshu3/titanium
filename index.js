@@ -73,9 +73,6 @@ exports.operatorModules = {
 	'push' : function(arr, element) {
 		arr.push(element);
 	},
-	'map' : function(arr, func) {
-		return arr.map(func);
-	},
 	'length' : function(arr) {
 		return arr.length;
 	},
@@ -137,6 +134,25 @@ exports.specialOperators = {
 		while(processExpression(ifExpression, stack), stack.pop()) {
 			processExpression(loopBody, stack);
 		}
+	},
+	'map' : function(stack) {
+		var procedure = stack.pop();
+		var array = stack.pop();
+		var result = [];
+
+		if (typeof procedure == 'function') {
+			result = array.map(procedure);
+		} else {
+			var titaniumProcedure = procedure.expression;
+			for (var i = 0; i < array.length; i++) {
+				stack.push(array[i]);
+				processExpression(titaniumProcedure, stack);
+				var titaniumProcedureResult = stack.pop();
+				result.push(titaniumProcedureResult);
+			}
+		}
+
+		stack.push(result);
 	}
 };
 
