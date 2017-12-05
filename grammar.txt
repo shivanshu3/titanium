@@ -71,7 +71,7 @@ symbolOperator "symbolOperator"
 
 variableOperator "variableOperator"
     = '=' name:identifier { return makeVariableOperator('=', name); }
-    / '^' name:identifier { return makeVariableOperator('^', name); }
+    / '!' name:identifier { return makeVariableOperator('!', name); }
 
 identifier "identifier"
     = head:[a-zA-Z_] tail:[a-zA-Z_0-9]*

@@ -189,7 +189,7 @@ function processExpression(expr, stack) {
 function operate(stack, operatorTerm) {
 	// console.log(operatorTerm.opType + ' operating...');
 	if (operatorTerm.opType == 'variableOperator') {
-		if (operatorTerm.variableOpType == '^') {
+		if (operatorTerm.variableOpType == '!') {
 			if (theHeap[operatorTerm.variableName] != undefined) {
 				stack.push(theHeap[operatorTerm.variableName]);
 			} else if (exports.operatorModules[operatorTerm.variableName] != undefined) {
