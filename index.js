@@ -112,6 +112,14 @@ exports.specialOperators = {
 		} else {
 			processExpression(falseBody, stack);
 		}
+	},
+	'while' : function(stack) {
+		var loopBody = stack.pop().expression;
+		var ifExpression = stack.pop().expression;
+
+		while(processExpression(ifExpression, stack), stack.pop()) {
+			processExpression(loopBody, stack);
+		}
 	}
 };
 
