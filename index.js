@@ -27,8 +27,48 @@ var mainStack = [];
 
 var compiledExpression = compileExpression(ast);
 
-for (var i = 0; i < compiledExpression.terms.length; i++) {
-	mainStack.push(compiledExpression.terms[i]);
+processExpression(compiledExpression);
+
+function processExpression(expr) {
+	for (var i = 0; i < expr.terms.length; i++) {
+		var term = expr.terms[i];
+		if (!termIsOperator(term)) {
+			mainStack.push(expr);
+		} else {
+			operate(mainStack, term);
+		}
+	}
+}
+
+function operate(stack, term) {
+	console.log(term.opType + ' operating...');
+}
+
+/**
+ * Takes a compiled term as input
+ */
+function termIsLiteral(term) {
+	if (typeof term == 'object') {
+		if (term instanceof RegExp) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
+}
+
+function termIsOperator(term) {
+	if (termIsLiteral(term)) {
+		return false;
+	}
+
+	if (term.type == 'operator') {
+		return true;
+	}
+
+	return false;
 }
 
 function compileExpression(expr) {
