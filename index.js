@@ -4,6 +4,8 @@ var fs = require('fs');
 var process = require('process');
 var parser = require('./grammar.js');
 
+var userModules = require('C:\\Users\\Shivanshu\\Documents\\test.js');
+
 var inputProgram;
 
 if (process.argv.length == 2) {
@@ -190,7 +192,9 @@ function operate(stack, operatorTerm) {
 	// console.log(operatorTerm.opType + ' operating...');
 	if (operatorTerm.opType == 'variableOperator') {
 		if (operatorTerm.variableOpType == '!') {
-			if (theHeap[operatorTerm.variableName] != undefined) {
+			if (userModules[operatorTerm.variableName] != undefined) {
+				stack.push(userModules[operatorTerm.variableName]);
+			} else if (theHeap[operatorTerm.variableName] != undefined) {
 				stack.push(theHeap[operatorTerm.variableName]);
 			} else if (exports.operatorModules[operatorTerm.variableName] != undefined) {
 				stack.push(exports.operatorModules[operatorTerm.variableName]);
@@ -202,6 +206,9 @@ function operate(stack, operatorTerm) {
 		} else {
 			throw 'bad variable operator?';
 		}
+	} else if (userModules[operatorTerm.name] != undefined) {
+		var operatorModule = userModules[operatorTerm.name];
+		applyOperatorModule(stack, operatorModule);
 	} else if (exports.specialOperators[operatorTerm.name] != undefined) {
 		var operatorModule = exports.specialOperators[operatorTerm.name];
 		operatorModule(stack);
