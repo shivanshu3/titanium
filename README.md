@@ -98,3 +98,9 @@ Custom lambda functions can be written and used in addition to the built in ones
     newarray 3 push 4 push 5 push (dup *) map !print map
 
 The `(dup *)` lambda function duplicates the top most item on the stack and multiplies it, which ends up squaring the number. So the numbers printed by the program above should be `9`, `16`, and `25`.
+
+**Reading files**
+
+Files can be read using the `readlines` operator like the following:
+
+    @`C:\foo\file.txt` readlines !print map
