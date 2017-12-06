@@ -3,18 +3,47 @@
 var fs = require('fs');
 var process = require('process');
 var parser = require('./grammar.js');
+var path = require('path');
 
-var userModules = require('C:\\Users\\Shivanshu\\Documents\\test.js');
+var userModules;
 
 var inputProgram;
 
-if (process.argv.length == 2) {
-	inputProgram = fs.readFileSync('./test_input').toString();
+if (process.argv.length <= 2) {
+	console.log('Titnaium: Read the code for documentation :)');
+	process.exit(0);
 } else {
-	inputProgram = '';
-	for (var i = 2; i < process.argv.length; i++) {
-		inputProgram = inputProgram + ' ' + process.argv[i];
+	var commandLineOptions = parseCommandLineArgs();
+	if (commandLineOptions.options.modules != undefined) {
+		userModules = require(path.resolve(commandLineOptions.options.modules));
+	} else {
+		userModules = {};
 	}
+
+	inputProgram = commandLineOptions.inputProgram;
+}
+
+function parseCommandLineArgs() {
+	var inputProgram = '';
+	var options = {};
+
+	for (var i = 2; i < process.argv.length; i++) {
+		var arg = process.argv[i];
+
+		var cmdArgMatch = arg.match(/\/(\w+)\:(.+)/);
+		if (cmdArgMatch) {
+			var key = cmdArgMatch[1];
+			var value = cmdArgMatch[2];
+			options[key] = value;
+		} else {
+			inputProgram = inputProgram + ' ' + arg;
+		}
+	}
+
+	return {
+		inputProgram: inputProgram,
+		options: options
+	};
 }
 
 function stringifyErrorLocation(location) {
