@@ -14,13 +14,18 @@ if (process.argv.length <= 2) {
 	process.exit(0);
 } else {
 	var commandLineOptions = parseCommandLineArgs();
+
 	if (commandLineOptions.options.modules != undefined) {
 		userModules = require(path.resolve(commandLineOptions.options.modules));
 	} else {
 		userModules = {};
 	}
 
-	inputProgram = commandLineOptions.inputProgram;
+	if (commandLineOptions.options.in != undefined) {
+		inputProgram = fs.readFileSync(path.resolve(commandLineOptions.options.in)).toString();
+	} else {
+		inputProgram = commandLineOptions.inputProgram;
+	}
 }
 
 function parseCommandLineArgs() {
