@@ -129,7 +129,20 @@ regex_char "regular expression character"
     = [^\0-\x1F\x2F]
 
 string "string"
+    = non_verbatim_string
+    / verbatim_string
+
+non_verbatim_string "non_verbatim_string"
     = '`' chars:char* '`' {
+        return {
+            type: 'literal',
+            literalType: 'string',
+            value: chars.join("")
+        };
+    }
+
+verbatim_string "verbatim_string"
+    = '@`' chars:verbatim_char* '`' {
         return {
             type: 'literal',
             literalType: 'string',
@@ -157,6 +170,9 @@ char "character"
 
 escape "backslash"
     = '\\'
+
+verbatim_char "verbatim_char"
+    = [^\0-\x1F\x60]
 
 unescaped "unescaped character"
     = [^\0-\x1F\x60\x5C]
