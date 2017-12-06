@@ -37,8 +37,8 @@ Simple programs which won't confuse your shell can also be written without putti
 
 `titanium` can also be used instead of `t` on the command line.
 
-Documentation
--------------
+Language Documentation
+----------------------
 
 **Literals**
 
@@ -98,3 +98,43 @@ Custom lambda functions can be written and used in addition to the built in ones
     newarray 3 push 4 push 5 push (dup *) map !print map
 
 The `(dup *)` lambda function duplicates the top most item on the stack and multiplies it, which ends up squaring the number. So the numbers printed by the program above should be `9`, `16`, and `25`.
+
+**Reading files**
+
+Files can be read using the `readlines` operator like the following:
+
+    @`C:\foo\file.txt` readlines !print map
+
+**Advanced Example**
+
+    @`C:\test.txt` readlines 100 =id ( /\d+/ !id searchreplace !id ++ =id ) map !print map
+
+The program above takes a files with the lines `foo33`, `foo78`, `foo1`, etc. and outputs `foo100`, `foo101`, `foo102`.
+
+Using Custom JS Modules
+-----------------------
+
+A custom JS module should export an object, whose keys would be used as operator identifiers, and the values would be used as the functions which run when the operator is used. Example module file:
+
+    var sqr = function(a) {
+        return x*x;
+    }
+    
+    var pi = function() {
+        return Math.PI;
+    }
+    
+    export {
+        sqr: sqr,
+        pi: pi
+    };
+
+The module above can be used in a titnaium program like the following:
+
+    3 4 + pi + sqr print
+
+The program above adds 3, 4, pi, and squares the end result.
+
+The module, along with the input titanium source can be specified on the command line:
+
+    t /modules:C:\modules\mymodules.js /in:mysource.ttn
