@@ -37,8 +37,8 @@ Simple programs which won't confuse your shell can also be written without putti
 
 `titanium` can also be used instead of `t` on the command line.
 
-Documentation
--------------
+Language Documentation
+----------------------
 
 **Literals**
 
@@ -104,3 +104,9 @@ The `(dup *)` lambda function duplicates the top most item on the stack and mult
 Files can be read using the `readlines` operator like the following:
 
     @`C:\foo\file.txt` readlines !print map
+
+**Advanced Example**
+
+    @`C:\test.txt` readlines 100 =id ( /\d+/ !id searchreplace !id ++ =id ) map !print map
+
+The program above takes a files with the lines `foo33`, `foo78`, `foo1`, etc. and outputs `foo100`, `foo101`, `foo102`.
