@@ -58,9 +58,11 @@ Verbatim strings can contain backslashes, but in non-verbatim strings they have 
 **Variables**
 
 Variable assignment pops an entry from the stack and assigns it to the variable:
+
     10 3 + =foo
 
 Variables can be put back on the stack like so:
+
     10 3 + =foo !foo !foo / print
     
 The program above outputs 1 (it divides 13 by itself).
@@ -82,3 +84,17 @@ Currently while loops are the only kind of loops which are implemented, and they
     (5 3 >) (`foo` print) while
     
 (The loop above will obviously loop forever!)
+
+**map operator**
+
+The map operator is one of the very useful operators in this language. (You can find others by looking at the source).
+
+    newarray 3 push 4 push 5 push !print map
+    
+The example above constructs an array which looks like this `[3,4,5]`. Then the `print` function is placed on the stack, and then the `map` operator is called. The `print` function is applied to all elements of the array, and therefore everything in the array is printed to stdout.
+
+Custom lambda functions can be written and used in addition to the built in ones like so:
+
+    newarray 3 push 4 push 5 push (dup *) map !print map
+
+The `(dup *)` lambda function duplicates the top most item on the stack and multiplies it, which ends up squaring the number. So the numbers printed by the program above should be `9`, `16`, and `25`.
