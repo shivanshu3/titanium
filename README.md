@@ -40,6 +40,31 @@ Simple programs which won't confuse your shell can also be written without putti
 Documentation
 -------------
 
+**Literals**
+
+These are the literals which are currently supported:
+- numbers (ex, `3.14`)
+- booleans (ex, `true`/`false`)
+- regexes (ex, `/foo(\d+)/i`)
+- strings
+
+Strings look like the following:
+
+    `this is a non verbatim string\r\n`
+    @`C:\foo\verbatim_string`
+
+Verbatim strings can contain backslashes, but in non-verbatim strings they have a special meaning (just like any other language).
+
+**Variables**
+
+Variable assignment pops an entry from the stack and assigns it to the variable:
+    10 3 + =foo
+
+Variables can be put back on the stack like so:
+    10 3 + =foo !foo !foo / print
+    
+The program above outputs 1 (it divides 13 by itself).
+
 **If statements and loops**
 
 If statements and loops are also stack based! The boolean condition, main body, and the `if`/`ifelse`/`while` operators all go on the stack like so:
