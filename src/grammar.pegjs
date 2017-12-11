@@ -1,3 +1,8 @@
+/**
+ * PegJS Parser Generator Grammar
+ * http://pegjs.org/
+ */
+
 {
     function makeSymbolOperator(text) {
         return {

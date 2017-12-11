@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var peg = require('pegjs');
 
-var grammarTxtPath = path.join(__dirname, '..', 'src', 'grammar.txt');
+var grammarTxtPath = path.join(__dirname, '..', 'src', 'grammar.pegjs');
 var grammarJsPath = path.join(__dirname, '..', 'out', 'grammar.js');
 
 var grammar = fs.readFileSync(grammarTxtPath).toString();
