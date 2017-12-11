@@ -6,6 +6,13 @@ var parser = require('./parser');
 var interpreter = require('./interpreter.js');
 
 /**
+ * Parses the given program, interprets it, and returns the top value from the stack
+ */
+function parseAndInterpret(program) {
+	return interpreter.interpret(parser.parse(program), {}).pop();
+}
+
+/**
  * The most basic smoke test which tries to emulate an end user scenario.
  */
 function smoke() {
@@ -51,8 +58,7 @@ function test1() {
  * A basic interpreter test
  */
 function test2() {
-	var program = "3 4 +";
-	var result = interpreter.interpret(parser.parse(program), {}).pop();
+	var result = parseAndInterpret("3 4 +");
 	assert.strictEqual(result, 7);
 	return true;
 }
@@ -72,7 +78,46 @@ function test3() {
 	return true;
 }
 
-var tests = [smoke, test1, test2, test3];
+/**
+ * If statements
+ */
+function test4() {
+	var result;
+
+	var ifEnter = "100 =a (3 4 <) (200 =a) if !a";
+	result = parseAndInterpret(ifEnter);
+	assert.strictEqual(result, 200);
+
+	var ifNoEnter = "100 =a (3 4 >) (200 =a) if !a";
+	result = parseAndInterpret(ifNoEnter);
+	assert.strictEqual(result, 100);
+
+	var ifElseTrue = "(3 4 <) (11) (22) ifelse";
+	result = parseAndInterpret(ifElseTrue);
+	assert.strictEqual(result, 11);
+
+	var ifElseFalse = "(3 4 >) (11) (22) ifelse";
+	result = parseAndInterpret(ifElseFalse);
+	assert.strictEqual(result, 22);
+
+	return true;
+}
+
+/**
+ * Loops
+ */
+function test5() {
+
+}
+
+/**
+ * variables
+ */
+function test6() {
+
+}
+
+var tests = [smoke, test1, test2, test3, test4, test5, test6];
 
 for (var i = 0; i < tests.length; i++) {
 	var testName = tests[i].name;
