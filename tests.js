@@ -15,7 +15,7 @@ function parseAndInterpret(program) {
 /**
  * The most basic smoke test which tries to emulate an end user scenario.
  */
-function smoke() {
+function test0() {
 	var output = child_process.execSync('node index.js 3 4 + print').toString();
 	assert.equal(output, '7\n');
 	return true;
@@ -107,17 +107,23 @@ function test4() {
  * Loops
  */
 function test5() {
-
+	var counter = "0 =sum 0 =i (!i 10 <) (!sum 2 + =sum !i ++ =i) while !sum";
+	result = parseAndInterpret(counter);
+	assert.strictEqual(result, 20);
+	return true;
 }
 
 /**
  * variables
  */
 function test6() {
-
+	var counter = "10 =a 20 =b !a !b + =sum !sum";
+	result = parseAndInterpret(counter);
+	assert.strictEqual(result, 30);
+	return true;
 }
 
-var tests = [smoke, test1, test2, test3, test4, test5, test6];
+var tests = [test0, test1, test2, test3, test4, test5, test6];
 
 for (var i = 0; i < tests.length; i++) {
 	var testName = tests[i].name;
