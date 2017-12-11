@@ -1,3 +1,5 @@
+var basicOperatorModules = require('./BasicOperatorModules.js');
+
 var theHeap = {};
 var userModules;
 
@@ -23,75 +25,6 @@ function processExpression(expr, stack) {
 		}
 	}
 }
-
-// this is a hack to make operatorModules a global variable.
-// it should not be tied to the exports object.
-exports.operatorModules = {
-	'+' : function(a, b) {
-		return a + b;
-	},
-	'-' : function(a, b) {
-		return a - b;
-	},
-	'*' : function(a, b) {
-		return a * b;
-	},
-	'/' : function(a, b) {
-		return a / b;
-	},
-	'>' : function(a, b) {
-		return a > b;
-	},
-	'<' : function(a, b) {
-		return a < b;
-	},
-	'>=' : function(a, b) {
-		return a >= b;
-	},
-	'<=' : function(a, b) {
-		return a <= b;
-	},
-	'==' : function(a, b) {
-		return a == b;
-	},
-	'++' : function(a) {
-		return a + 1;
-	},
-	'--' : function(a) {
-		return a - 1;
-	},
-	'[]' : function(arr, index) {
-		return arr[index];
-	},
-	'print' : function(x) {
-		console.log(x);
-	},
-	'newarray' : function() {
-		return [];
-	},
-	'push' : function(arr, element) {
-		arr.push(element);
-		return arr;
-	},
-	'length' : function(arr) {
-		return arr.length;
-	},
-	'del' : function(a) {
-	},
-	'concat' : function(a, b) {
-		return a.concat(b);
-	},
-	'readlines' : function(fileName) {
-		var fileContents = fs.readFileSync(fileName).toString();
-		return fileContents.split(/\r?\n/);
-	},
-	'grep' : function(arr, regex) {
-		return arr.filter(x => regex.test(x));
-	},
-	'searchreplace' : function(str, search, replace) {
-		return str.replace(search, replace);
-	}
-};
 
 // this is also a hack. should not be a part of the exports object:
 exports.specialOperators = {
@@ -164,8 +97,8 @@ function operate(stack, operatorTerm) {
 				stack.push(userModules[operatorTerm.variableName]);
 			} else if (theHeap[operatorTerm.variableName] != undefined) {
 				stack.push(theHeap[operatorTerm.variableName]);
-			} else if (exports.operatorModules[operatorTerm.variableName] != undefined) {
-				stack.push(exports.operatorModules[operatorTerm.variableName]);
+			} else if (basicOperatorModules[operatorTerm.variableName] != undefined) {
+				stack.push(basicOperatorModules[operatorTerm.variableName]);
 			} else {
 				throw 'Could not find ' + operatorTerm.variableName;
 			}
@@ -180,8 +113,8 @@ function operate(stack, operatorTerm) {
 	} else if (exports.specialOperators[operatorTerm.name] != undefined) {
 		var operatorModule = exports.specialOperators[operatorTerm.name];
 		operatorModule(stack);
-	} else if (exports.operatorModules[operatorTerm.name] != undefined) {
-		var operatorModule = exports.operatorModules[operatorTerm.name];
+	} else if (basicOperatorModules[operatorTerm.name] != undefined) {
+		var operatorModule = basicOperatorModules[operatorTerm.name];
 		applyOperatorModule(stack, operatorModule);
 	} else {
 		throw 'bad operator? ' + operatorTerm.name;
