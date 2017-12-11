@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 var process = require('process');
-var parser = require('./grammar.js');
+var parser = require('./parser.js');
 var path = require('path');
 
 var userModules;
