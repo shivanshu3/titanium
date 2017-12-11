@@ -8,8 +8,8 @@
     "install": "node scripts/install.js"
   },
   "bin": {
-    "titanium": "./index.js",
-    "t": "./index.js"
+    "titanium": "./src/index.js",
+    "t": "./src/index.js"
   },
   "author": "",
   "license": "ISC",

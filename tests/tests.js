@@ -2,8 +2,8 @@ var process = require('process');
 var assert = require('assert');
 var child_process = require('child_process');
 
-var parser = require('../parser');
-var interpreter = require('../interpreter.js');
+var parser = require('../src/parser');
+var interpreter = require('../src/interpreter.js');
 
 /**
  * Parses the given program, interprets it, and returns the top value from the stack
@@ -16,7 +16,7 @@ function parseAndInterpret(program) {
  * The most basic smoke test which tries to emulate an end user scenario.
  */
 function test0() {
-	var output = child_process.execSync('node index.js 3 4 + print').toString();
+	var output = child_process.execSync('node src/index.js 3 4 + print').toString();
 	assert.equal(output, '7\n');
 	return true;
 }
