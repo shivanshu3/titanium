@@ -2,8 +2,8 @@ var process = require('process');
 var assert = require('assert');
 var child_process = require('child_process');
 
-var parser = require('./parser');
-var interpreter = require('./interpreter.js');
+var parser = require('../parser');
+var interpreter = require('../interpreter.js');
 
 /**
  * Parses the given program, interprets it, and returns the top value from the stack

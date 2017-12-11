@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node tests.js",
-    "install": "node install.js",
-    "uninstall": "node uninstall.js"
+    "test": "node tests/tests.js",
+    "install": "node scripts/install.js"
   },
   "bin": {
     "titanium": "./index.js",
