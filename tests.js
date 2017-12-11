@@ -5,12 +5,18 @@ var child_process = require('child_process');
 var parser = require('./parser');
 var interpreter = require('./interpreter.js');
 
+/**
+ * The most basic smoke test which tries to emulate an end user scenario.
+ */
 function smoke() {
 	var output = child_process.execSync('node index.js 3 4 + print').toString();
 	assert.equal(output, '7\n');
 	return true;
 }
 
+/**
+ * Parser test
+ */
 function test1() {
 	var ast = parser.parse("3 4 + print");
 
@@ -41,7 +47,32 @@ function test1() {
 	return true;
 }
 
-var tests = [smoke, test1];
+/**
+ * A basic interpreter test
+ */
+function test2() {
+	var program = "3 4 +";
+	var result = interpreter.interpret(parser.parse(program), {}).pop();
+	assert.strictEqual(result, 7);
+	return true;
+}
+
+/**
+ * User modules
+ */
+function test3() {
+	var program = "3 4 usermodule_square";
+	var userModules = {
+		'usermodule_square': function(a) {
+			return a*a;
+		}
+	};
+	var result = interpreter.interpret(parser.parse(program), userModules).pop();
+	assert.strictEqual(result, 16);
+	return true;
+}
+
+var tests = [smoke, test1, test2, test3];
 
 for (var i = 0; i < tests.length; i++) {
 	var testName = tests[i].name;

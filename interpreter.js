@@ -9,6 +9,8 @@ var interpret = function(ast, _userModules) {
 
 	var compiledExpression = compileExpression(ast);
 	processExpression(compiledExpression, mainStack);
+
+	return mainStack;
 };
 
 function processExpression(expr, stack) {
