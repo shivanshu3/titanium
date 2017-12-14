@@ -124,7 +124,7 @@ A custom JS module should export an object, whose keys would be used as operator
         return Math.PI;
     }
     
-    export {
+    module.exports = {
         sqr: sqr,
         pi: pi
     };
