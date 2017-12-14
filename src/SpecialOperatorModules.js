@@ -1,3 +1,8 @@
+/**
+ * These special modules require special handling currently
+ * and users can't write these in their own custom modules file.
+ */
+
 var processExpression;
 
 var modules = {

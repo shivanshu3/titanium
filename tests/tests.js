@@ -1,6 +1,7 @@
 var process = require('process');
 var assert = require('assert');
 var child_process = require('child_process');
+var path = require('path');
 
 var parser = require('../src/parser');
 var interpreter = require('../src/interpreter.js');
@@ -123,7 +124,20 @@ function test6() {
 	return true;
 }
 
-var tests = [test0, test1, test2, test3, test4, test5, test6];
+/**
+ * Reading files
+ */
+function test7() {
+	var testFilePath = path.join(__dirname, 'testfile.txt');
+	var program = '@`' + testFilePath + '`' + ' readlines';
+	var result = parseAndInterpret(program);
+	assert.strictEqual(result[0], 'foo');
+	assert.strictEqual(result[1], 'bar');
+	assert.strictEqual(result[2], 'baz');
+	return true;
+}
+
+var tests = [test0, test1, test2, test3, test4, test5, test6, test7];
 
 for (var i = 0; i < tests.length; i++) {
 	var testName = tests[i].name;

@@ -3,6 +3,8 @@
  * They don't need any special handling.
  */
 
+var fs = require('fs');
+
 var modules = {
 	'+' : function(a, b) {
 		return a + b;
